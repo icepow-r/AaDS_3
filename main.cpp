@@ -27,23 +27,23 @@ void printBinaryTree(BinaryTreeNode<int>* node, std::string prefix = "", bool is
     if (!node) return;
 
     std::cout << prefix;
-    std::cout << (isLeft ? "├── " : "└── ");
+    std::cout << (isLeft ? "|-- " : "|-- ");
     std::cout << node->data << "\n";
 
     if (node->left || node->right)
     {
         if (node->left)
         {
-            printBinaryTree(node->left, prefix + (isLeft ? "│   " : "    "), true);
+            printBinaryTree(node->left, prefix + (isLeft ? "|   " : "    "), true);
         }
         else if (node->right)
         {
-            std::cout << prefix << (isLeft ? "│   " : "    ") << "├── (empty)\n";
+            std::cout << prefix << (isLeft ? "|   " : "    ") << "|-- (empty)\n";
         }
 
         if (node->right)
         {
-            printBinaryTree(node->right, prefix + (isLeft ? "│   " : "    "), false);
+            printBinaryTree(node->right, prefix + (isLeft ? "|   " : "    "), false);
         }
     }
 }
@@ -53,7 +53,7 @@ void printRBTreeHelper(RBNode<int>* node, std::string prefix = "", bool isLeft =
     if (!node) return;
 
     std::cout << prefix;
-    std::cout << (isLeft ? "├── " : "└── ");
+    std::cout << (isLeft ? "|-- " : "|-- ");
     std::cout << node->data;
     std::cout << (node->color == RED ? "(R)" : "(B)");
     std::cout << "\n";
@@ -62,16 +62,16 @@ void printRBTreeHelper(RBNode<int>* node, std::string prefix = "", bool isLeft =
     {
         if (node->left)
         {
-            printRBTreeHelper(node->left, prefix + (isLeft ? "│   " : "    "), true);
+            printRBTreeHelper(node->left, prefix + (isLeft ? "|   " : "    "), true);
         }
         else if (node->right)
         {
-            std::cout << prefix << (isLeft ? "│   " : "    ") << "├── (empty)\n";
+            std::cout << prefix << (isLeft ? "|   " : "    ") << "|-- (empty)\n";
         }
 
         if (node->right)
         {
-            printRBTreeHelper(node->right, prefix + (isLeft ? "│   " : "    "), false);
+            printRBTreeHelper(node->right, prefix + (isLeft ? "|   " : "    "), false);
         }
     }
 }
@@ -94,9 +94,7 @@ public:
         try
         {
             std::string content = readFile(filename);
-            std::cout << "\n╔════════════════════════════════════════╗\n";
-            std::cout << "║         Loading Tree from File         ║\n";
-            std::cout << "╚════════════════════════════════════════╝\n";
+            std::cout << "        Loading Tree from File         \n";
             std::cout << "\nFile: " << filename << "\n";
             std::cout << "Content: " << content << "\n";
 
@@ -126,13 +124,11 @@ public:
     {
         if (!treeLoaded)
         {
-            std::cout << "\n⚠ No tree loaded. Please load a tree first.\n";
+            std::cout << "\nNo tree loaded. Please load a tree first.\n";
             return;
         }
 
-        std::cout << "\n╔════════════════════════════════════════╗\n";
-        std::cout << "║     Binary Tree Visualization          ║\n";
-        std::cout << "╚════════════════════════════════════════╝\n";
+        std::cout << "    Binary Tree Visualization          \n";
         std::cout << "\nRoot\n";
         printBinaryTree(binaryTree->getRoot(), "", true);
     }
@@ -141,13 +137,11 @@ public:
     {
         if (!treeLoaded)
         {
-            std::cout << "\n⚠ No tree loaded. Please load a tree first.\n";
+            std::cout << "\nNo tree loaded. Please load a tree first.\n";
             return;
         }
 
-        std::cout << "\n╔════════════════════════════════════════╗\n";
-        std::cout << "║   Red-Black Tree Visualization         ║\n";
-        std::cout << "╚════════════════════════════════════════╝\n";
+        std::cout << "  Red-Black Tree Visualization         \n";
         std::cout << "\n(R) = Red, (B) = Black\n";
         std::cout << "\nRoot\n";
         printRBTreeHelper(rbTree->getRoot(), "", true);
@@ -157,19 +151,17 @@ public:
     {
         if (!treeLoaded)
         {
-            std::cout << "\n⚠ No tree loaded. Please load a tree first.\n";
+            std::cout << "\nNo tree loaded. Please load a tree first.\n";
             return;
         }
 
-        std::cout << "\n╔════════════════════════════════════════╗\n";
-        std::cout << "║  Binary Tree Traversal (Preorder)      ║\n";
-        std::cout << "╚════════════════════════════════════════╝\n";
+        std::cout << " Binary Tree Traversal (Preorder)      \n";
         std::cout << "\nNodes: ";
         bool first = true;
         binaryTree->traverse(
             [&first](int val)
             {
-                if (!first) std::cout << " → ";
+                if (!first) std::cout << " -> ";
                 std::cout << val;
                 first = false;
             });
@@ -180,21 +172,65 @@ public:
     {
         if (!treeLoaded)
         {
-            std::cout << "\n⚠ No tree loaded. Please load a tree first.\n";
+            std::cout << "\nNo tree loaded. Please load a tree first.\n";
             return;
         }
 
-        std::cout << "\n╔════════════════════════════════════════╗\n";
-        std::cout << "║    Red-Black Tree Traversal Menu       ║\n";
-        std::cout << "╚════════════════════════════════════════╝\n";
-        std::cout << "\n1. Breadth-First (Level Order)\n";
-        std::cout << "2. Depth-First Preorder\n";
-        std::cout << "3. Depth-First Inorder (Sorted)\n";
-        std::cout << "4. Depth-First Postorder\n";
-        std::cout << "\nYour choice: ";
+        std::cout << "   Red-Black Tree All Traversals       \n";
 
-        int choice;
-        std::cin >> choice;
+        std::cout << "\nInorder (Sorted): ";
+        bool first = true;
+        rbTree->inorderTraversalWithColor(
+            [&first](int val, Color color)
+            {
+                if (!first) std::cout << " -> ";
+                std::cout << val << (color == RED ? "(R)" : "(B)");
+                first = false;
+            });
+
+        std::cout << "\n\nPreorder: ";
+        first = true;
+        rbTree->preorderTraversalWithColor(
+            [&first](int val, Color color)
+            {
+                if (!first) std::cout << " -> ";
+                std::cout << val << (color == RED ? "(R)" : "(B)");
+                first = false;
+            });
+
+        std::cout << "\n\nPostorder: ";
+        first = true;
+        rbTree->postorderTraversalWithColor(
+            [&first](int val, Color color)
+            {
+                if (!first) std::cout << " -> ";
+                std::cout << val << (color == RED ? "(R)" : "(B)");
+                first = false;
+            });
+
+        std::cout << "\n\nBreadth-First (Level Order): ";
+        first = true;
+        rbTree->breadthFirstTraversalWithColor(
+            [&first](int val, Color color)
+            {
+                if (!first) std::cout << " -> ";
+                std::cout << val << (color == RED ? "(R)" : "(B)");
+                first = false;
+            });
+        std::cout << "\n";
+    }
+
+    void insertToRBTree()
+    {
+        if (!treeLoaded)
+        {
+            std::cout << "\nNo tree loaded. Please load a tree first.\n";
+            return;
+        }
+
+        std::cout << "\nEnter value to insert: ";
+        int value;
+        std::cin >> value;
 
         if (std::cin.fail())
         {
@@ -204,71 +240,84 @@ public:
             return;
         }
 
-        std::cout << "\n═══════════════════════════════════════\n";
-        std::cout << "Nodes: ";
-        bool first = true;
+        rbTree->insert(value);
+        std::cout << "\nValue " << value << " successfully inserted into Red-Black tree!\n";
+    }
 
-        switch (choice)
+    void deleteFromRBTree()
+    {
+        if (!treeLoaded)
         {
-            case 1:
-                std::cout << "(Breadth-First)\n";
-                rbTree->breadthFirstTraversal(
-                    [&first](int val)
-                    {
-                        if (!first) std::cout << " → ";
-                        std::cout << val;
-                        first = false;
-                    });
-                break;
-            case 2:
-                std::cout << "(Preorder)\n";
-                rbTree->preorderTraversal(
-                    [&first](int val)
-                    {
-                        if (!first) std::cout << " → ";
-                        std::cout << val;
-                        first = false;
-                    });
-                break;
-            case 3:
-                std::cout << "(Inorder - Sorted)\n";
-                rbTree->inorderTraversal(
-                    [&first](int val)
-                    {
-                        if (!first) std::cout << " → ";
-                        std::cout << val;
-                        first = false;
-                    });
-                break;
-            case 4:
-                std::cout << "(Postorder)\n";
-                rbTree->postorderTraversal(
-                    [&first](int val)
-                    {
-                        if (!first) std::cout << " → ";
-                        std::cout << val;
-                        first = false;
-                    });
-                break;
-            default:
-                std::cout << "\nInvalid choice!\n";
-                return;
+            std::cout << "\nNo tree loaded. Please load a tree first.\n";
+            return;
         }
-        std::cout << "\n";
+
+        std::cout << "\nEnter value to delete: ";
+        int value;
+        std::cin >> value;
+
+        if (std::cin.fail())
+        {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "\nInvalid input!\n";
+            return;
+        }
+
+        if (rbTree->search(value))
+        {
+            rbTree->remove(value);
+            std::cout << "\nValue " << value << " successfully deleted from Red-Black tree!\n";
+        }
+        else
+        {
+            std::cout << "\nValue " << value << " not found in tree!\n";
+        }
+    }
+
+    void searchInRBTree()
+    {
+        if (!treeLoaded)
+        {
+            std::cout << "\nNo tree loaded. Please load a tree first.\n";
+            return;
+        }
+
+        std::cout << "\nEnter value to search: ";
+        int value;
+        std::cin >> value;
+
+        if (std::cin.fail())
+        {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "\nInvalid input!\n";
+            return;
+        }
+
+        if (rbTree->search(value))
+        {
+            std::cout << "\nValue " << value << " FOUND in Red-Black tree!\n";
+        }
+        else
+        {
+            std::cout << "\nValue " << value << " NOT FOUND in Red-Black tree!\n";
+        }
     }
 };
 
 
 void printMenu()
 {
-    std::cout << "╔════════════════════════════════════════╗\n";
-    std::cout << "║ 1. Load tree from file                 ║\n";
-    std::cout << "║ 2. Visualize Binary Tree               ║\n";
-    std::cout << "║ 3. Visualize Red-Black Tree            ║\n";
-    std::cout << "║ 4. Traverse Binary Tree                ║\n";
-    std::cout << "║ 5. Traverse Red-Black Tree             ║\n";
-    std::cout << "║ 0. Exit                                ║\n";
-    std::cout << "╚════════════════════════════════════════╝\n";
+    std::cout << " 1. Load tree from file                 \n";
+    std::cout << " 2. Visualize Binary Tree               \n";
+    std::cout << " 3. Visualize Red-Black Tree            \n";
+    std::cout << " 4. Traverse Binary Tree                \n";
+    std::cout << " 5. Traverse Red-Black Tree (All)       \n";
+    std::cout << " 6. Insert element to RB Tree           \n";
+    std::cout << " 7. Delete element from RB Tree         \n";
+    std::cout << " 8. Search element in RB Tree           \n";
+    std::cout << " 0. Exit                                \n";
 }
 
 int main()
@@ -276,9 +325,7 @@ int main()
     TreeManager manager;
     int choice;
 
-    std::cout << "\n╔════════════════════════════════════════╗\n";
-    std::cout << "║  Binary & Red-Black Tree Visualizer    ║\n";
-    std::cout << "╚════════════════════════════════════════╝\n";
+    std::cout << "\nBinary & Red-Black Tree Visualizer    \n";
 
     while (true)
     {
@@ -297,10 +344,8 @@ int main()
         switch (choice)
         {
             case 0:
-                std::cout << "\n╔════════════════════════════════════════╗\n";
-                std::cout << "║          Exiting program...            ║\n";
-                std::cout << "║            Goodbye!                    ║\n";
-                std::cout << "╚════════════════════════════════════════╝\n\n";
+                std::cout << "         Exiting program...            \n";
+                std::cout << "           Goodbye!                    \n";
                 return 0;
 
             case 1:
@@ -326,6 +371,18 @@ int main()
 
             case 5:
                 manager.traverseRBTree();
+                break;
+
+            case 6:
+                manager.insertToRBTree();
+                break;
+
+            case 7:
+                manager.deleteFromRBTree();
+                break;
+
+            case 8:
+                manager.searchInRBTree();
                 break;
 
             default:

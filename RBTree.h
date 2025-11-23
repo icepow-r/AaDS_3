@@ -485,6 +485,93 @@ class RBTree
     }
 
     RBNode<T>* getRoot() const { return root; }
+
+    void breadthFirstTraversalWithColor(std::function<void(T, Color)> visit)
+    {
+        if (!root) return;
+
+        std::queue<RBNode<T>*> q;
+        q.push(root);
+
+        while (!q.empty())
+        {
+            RBNode<T>* current = q.front();
+            q.pop();
+
+            visit(current->data, current->color);
+
+            if (current->left) q.push(current->left);
+            if (current->right) q.push(current->right);
+        }
+    }
+
+    void preorderTraversalWithColor(std::function<void(T, Color)> visit)
+    {
+        if (!root) return;
+
+        std::stack<RBNode<T>*> s;
+        s.push(root);
+
+        while (!s.empty())
+        {
+            RBNode<T>* current = s.top();
+            s.pop();
+
+            visit(current->data, current->color);
+
+            if (current->right) s.push(current->right);
+            if (current->left) s.push(current->left);
+        }
+    }
+
+    void inorderTraversalWithColor(std::function<void(T, Color)> visit)
+    {
+        if (!root) return;
+
+        std::stack<RBNode<T>*> s;
+        RBNode<T>* current = root;
+
+        while (current || !s.empty())
+        {
+            while (current)
+            {
+                s.push(current);
+                current = current->left;
+            }
+
+            current = s.top();
+            s.pop();
+
+            visit(current->data, current->color);
+
+            current = current->right;
+        }
+    }
+
+    void postorderTraversalWithColor(std::function<void(T, Color)> visit)
+    {
+        if (!root) return;
+
+        std::stack<RBNode<T>*> s1, s2;
+        s1.push(root);
+
+        while (!s1.empty())
+        {
+            RBNode<T>* current = s1.top();
+            s1.pop();
+            s2.push(current);
+
+            if (current->left) s1.push(current->left);
+            if (current->right) s1.push(current->right);
+        }
+
+        while (!s2.empty())
+        {
+            RBNode<T>* node = s2.top();
+            visit(node->data, node->color);
+            s2.pop();
+        }
+    }
 };
 
 #endif
